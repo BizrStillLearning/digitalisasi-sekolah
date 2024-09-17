@@ -1,63 +1,45 @@
-<!-- DataIndukSiswa.vue -->
 <template>
-    <div>
-      <h1 class="text-2xl font-bold mb-4">Data Induk Siswa</h1>
-      
-      <!-- Student Form -->
-      <StudentForm @submit="handleFormSubmit" :student="selectedStudent" :isEdit="isEdit" />
-      
-      <!-- Student Table -->
-      <StudentTable :students="students" @edit="editStudent" @delete="deleteStudent" />
+  <<div class="flex flex-wrap w-screen">
+    <Sidebar />
+    <MainNavbar />
+    <div class="flex-1 ml-64 mt-2">
+      <Navbar />
+      <main class="p-2">
+        <!-- Konten utama aplikasi -->
+      <StudentTable /> 
+        
+      </main>
     </div>
-  </template>
-  
-  <script>
-  import StudentTable from '../components/StudentTable.vue';
-  import StudentForm from '../components/StudentForm.vue';
-  
-  export default {
-    components: {
-      StudentTable,
-      StudentForm
-    },
-    data() {
-      return {
-        students: [
-          { nis: '123456', name: 'John Doe', class: '10A', major: 'Science', status: 'Active' }
-          // Data siswa lainnya
-        ],
-        selectedStudent: null,
-        isEdit: false
-      };
-    },
-    methods: {
-      handleFormSubmit(student) {
-        if (this.isEdit) {
-          // Update existing student
-          const index = this.students.findIndex(s => s.nis === student.nis);
-          if (index !== -1) {
-            this.students.splice(index, 1, student);
-          }
-        } else {
-          // Add new student
-          this.students.push(student);
-        }
-        // Reset form and state
-        this.selectedStudent = null;
-        this.isEdit = false;
-      },
-      editStudent(student) {
-        this.selectedStudent = student;
-        this.isEdit = true;
-      },
-      deleteStudent(nis) {
-        this.students = this.students.filter(student => student.nis !== nis);
-      }
+  </div>
+</template>
+
+<script >
+import Navbar from '@/components/Navbar.vue';
+import Sidebar from '@/components/Sidebar.vue';
+import MainNavbar from '@/components/MainNavbar.vue';
+import StudentForm from '@/components/StudentForm.vue';
+import StudentTable from '@/components/StudentTable.vue';
+import _ from 'lodash';
+import { mapGetters, mapActions } from 'vuex';
+
+
+export default {
+  components: {
+    StudentForm,
+    StudentTable,
+    Navbar,
+    Sidebar,
+    MainNavbar,
+  },
+  data() {
+    return {
+      searchQuery: ''
+    };
+  },
+  methods: {
+    handleSearchQuery(query) {
+      this.searchQuery = query;
     }
-  };
-  </script>
-  
-  <style scoped>
-  /* Optional: Add specific styles for this view */
-  </style>
-  
+  }
+}
+</script>
